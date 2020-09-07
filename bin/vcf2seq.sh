@@ -65,15 +65,15 @@ python $HUBBLE_PATH/bin/vcf2seq.py --vcf $prefix.final.gvcf --annotations rare,d
 
 # Clean up intermediate files
 echo "Cleaning up"
-#rm -f $prefix.chr.vcf
-#rm -f $prefix.norm.vcf
-#rm -f $prefix.gvcf
-#rm -f $prefix.split_snps.gvcf
-#rm -f $prefix.vep.gvcf
-#rm -f $prefix.hg19_multianno.vcf
-#rm -f $prefix.custom.gvcf
-#rm -f $prefix.hg19_multianno.txt
-#rm -f $prefix.vep.vcf_summary.html
-#rm -f $prefix.vep.vcf_warnings.txt
-#rm -f $prefix.avinput
-#rm -f $prefix.header.vcf
+rm -f $prefix.chr.vcf
+rm -f $prefix.norm.vcf
+rm -f $prefix.gvcf
+rm -f $prefix.split_snps.gvcf
+rm -f $prefix.vep.gvcf
+rm -f $prefix.hg19_multianno.vcf
+rm -f $prefix.custom.gvcf
+rm -f $prefix.hg19_multianno.txt
+rm -f $prefix.vep.vcf_summary.html
+rm -f $prefix.vep.vcf_warnings.txt
+rm -f $prefix.avinput
+rm -f $prefix.header.vcf
