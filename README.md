@@ -16,7 +16,7 @@ We recommend using a [conda](https://docs.conda.io/en/latest/) environment for t
 
 ### Quick Installation
 
-If you only need to analyze haplotypes containing SNVs and common INDELs *--coming soon--* (INDELs found in existing star alleles), you can use the quick installation.  We have precomputed embeddings for all possible SNVs and common INDELs so the lengthy annotation step is not needed. If you require analysis of INDELs not in existing star alleles, proceed to "Full Installation".
+If you only need to analyze haplotypes containing SNVs and common INDELs (INDELs found in existing star alleles), you can use the quick installation.  We have precomputed embeddings for all possible SNVs and common INDELs so the lengthy annotation step is not needed. If you require analysis of INDELs not in existing star alleles, proceed to "Full Installation".
 
 #### Intall Python libraries
 
@@ -81,6 +81,8 @@ should be marked as having a homozygous alternate allele (1/1).
 
 ### Data preprocessing
 
+#### Annotations
+
 **_If you are only processing SNVs and common INDELs you can skip this step._**
 
 First the VCF needs to be converted to a sequence of variant embeddings
@@ -94,6 +96,8 @@ sh bin/vcf2seq.sh data/test.vcf test
 ```
 
 This will generate a file with a .seq extension that can be used to predict function
+
+#### VCF
 
 ### Functional prediction
 
