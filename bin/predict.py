@@ -14,31 +14,32 @@ from keras.models import load_model, model_from_json
 
 
 class HubblePredict(object):
-    def __init__(self, seq_file, out_file, debug):
+    def __init__(self, seq_file=None, out_file=None, debug=False):
 
         # Set global variables
         self.seq_file = seq_file
         self.out_file = out_file
+        if self.out_file is None:
+            self.out_file = "hubble_output.txt"
         self.debug = debug
 
         # Load annotation embeddings
         self.embeddings = self.create_embedding_matrix()
 
-        # Generate predictions
-        self.run()
 
-    def run(self):
+    def run(self, data=None):
         if self.debug:
             print("Generating Hubble.2D6 Predictions")
 
         # Load data
-        data = self.load_data()
+        if data is None:
+            data = self.load_data()
 
         # Predict
         predicted_scores = self.predict(data)
 
         # Compile output
-        functions = self.score_to_function(predicted_scores)
+        functions = self.score_to_function(predicted_scores, data['sample_names'])
 
 
         # Print output
@@ -78,7 +79,7 @@ class HubblePredict(object):
         return predicted_scores
 
 
-    def score_to_function(self, predicted_scores):
+    def score_to_function(self, predicted_scores, samples=None):
         # Convert the star allele scores into discrete functions
 
         # Get the mean scores from the ensemble
@@ -94,17 +95,49 @@ class HubblePredict(object):
         cutpoint_1 = 0.4260022
         cutpoint_2 = 0.7360413
 
-        cuts = np.greater(mean_predicted_scores, [cutpoint_1, cutpoint_2])
+
+
+        #cuts = np.greater(mean_predicted_scores, [cutpoint_1, cutpoint_2])
+        cut_1 = np.greater(mean_predicted_scores[:,0], [cutpoint_1])
+        cut_2 = np.greater(mean_predicted_scores[:,1], [cutpoint_2])
+
+        #print(mean_predicted_scores)
+        #print(cuts)
+        #print(cut_1)
+        #print(cut_2)
 
         functions = []
-        for i in range(cuts.shape[0]):
-            scores = cuts[i]
-            if np.array_equal(scores, np.array([True, True])):
+        for i in range(cut_1.shape[0]):
+            score_1 = cut_1[i]
+            score_2 = cut_2[i]
+
+            raw_score_1 = mean_predicted_scores[i,0]
+            raw_score_2 = mean_predicted_scores[i, 1]
+
+
+
+            #print(score_1, score_2)
+            #print(score_2)
+            #exit()
+
+            if score_1 == True and score_2 == True:
                 functions.append("Normal Function")
-            elif np.array_equal(scores, np.array([True, False])):
+            elif score_1 == True and score_2 == False:
                 functions.append("Decreased Function")
             else:
                 functions.append("No Function")
+
+
+            if self.debug:
+                print(samples[i], raw_score_1, raw_score_2, score_1, score_2, functions[-1])
+
+            #scores = cuts[i]
+            #if np.array_equal(scores, np.array([True, True])):
+            #    functions.append("Normal Function")
+            #elif np.array_equal(scores, np.array([True, False])):
+            #    functions.append("Decreased Function")
+            #else:
+            #    functions.append("No Function")
 
         return functions
 
@@ -177,6 +210,8 @@ class HubblePredict(object):
         f.write("Sample\tPredictedFunction\n")
         for i in range(len(sample_names)):
             f.write("%s\t%s\n" % (sample_names[i], functions[i]))
+            if self.debug:
+                print("%s\t%s" % (sample_names[i], functions[i]))
 
 """
 Parse the command line
@@ -197,5 +232,6 @@ Main
 """
 if __name__ == "__main__":
     options = parse_command_line()
-    HubblePredict(options.file, options.out, options.debug)
+    hubble = HubblePredict(options.file, options.out, options.debug)
+    hubble.run()
 

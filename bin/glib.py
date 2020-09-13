@@ -89,3 +89,17 @@ def chunks(l, n):
 def byte_decoder(a):
     #print(a)
     return a.decode("utf-8")
+
+def hubble_welcome():
+    message = '''
+                                         
+             _____ _____ _____ _____ __    _____ 
+            |  |  |  |  | __  | __  |  |  |   __|
+            |     |  |  | __ -| __ -|  |__|   __|
+            |__|__|_____|_____|_____|_____|_____|
+                         Hubble.2D6
+                    Gregory McInnes, 2020
+                    gmcinnes@stanford.edu                         
+
+'''
+    print(message)

@@ -73,7 +73,7 @@ REF_GENOME=path_to_ref_genomie
 
 ## Run
 
-The input to Hubble2D6 is a VCF and can have as many samples as needed.  To evaluate star alleles, all sites with an alternate allele
+The input to Hubble.2D6 is a VCF and can have as many samples as needed.  To evaluate star alleles, all sites with an alternate allele
 should be marked as having a homozygous alternate allele (1/1).  
 
 
