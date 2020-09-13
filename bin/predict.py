@@ -145,7 +145,7 @@ class HubblePredict(object):
 
         # Get path to model directory
         wd = sys.path[0]
-        model_dir = os.path.join(wd, "../models/")
+        model_dir = os.path.join(wd, "../data/models/")
 
         # Get list of model names
         model_prefix = "hubble2d6"

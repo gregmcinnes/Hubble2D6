@@ -18,7 +18,7 @@ module load perl
 echo "Normalizing chromosome names"
 awk '{if($0 !~ /^#/ && $0 !~ /^chr/) print "chr"$0; else print $0}' $input_vcf > $prefix.chr.vcf
 
-# Normalize indels and flip sites that don't match thhe e asdf;lkj;
+# Normalize indels and flip sites that don't match the reference
 echo  "Normalizing INDELs"
 $BCFTOOLS_PATH/bcftools norm -f $REF_GENOME -c s -o $prefix.norm.vcf $prefix.chr.vcf
 
