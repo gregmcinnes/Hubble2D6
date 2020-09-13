@@ -243,8 +243,8 @@ def parse_vcf_line(line, annovar=False):
     row.chrom = fields[CHROM]
     row.pos = int(fields[POS])
     row.id = fields[ID]
-    row.ref = fields[REF]
-    row.alt = fields[ALT]
+    row.ref = fields[REF].upper()
+    row.alt = fields[ALT].upper()
     row.qual = fields[QUAL]
     row.filter = fields[FILTER]
     row.intake_info(fields[INFO])

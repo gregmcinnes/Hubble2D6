@@ -54,7 +54,7 @@ class Hubble(object):
     def seq_run(self):
         if self.debug:
             print("Running from seq file")
-        hubble = HubblePredict(seq_file=self.seq, output=self.output, debug=self.debug)
+        hubble = HubblePredict(seq_file=self.seq, out_file=self.output, debug=self.debug)
         hubble.run()
 
         if self.debug:
@@ -71,7 +71,7 @@ class Hubble(object):
         data = self.format_seqs(seqs)
 
         # Predict
-        hubble = HubblePredict(output=self.output, debug=self.debug)
+        hubble = HubblePredict(out_file=self.output, debug=self.debug)
         hubble.run(data=data)
 
     def build_seqs(self):
