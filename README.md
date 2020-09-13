@@ -98,6 +98,17 @@ sh bin/vcf2seq.sh data/test.vcf test
 This will generate a file with a .seq extension that can be used to predict function
 
 #### VCF
+When using SNVs and common INDELs, you should split multiallelic sites and realign INDELs. This ensures INDELs can be mapped consistently to annotation embeddings. These functions can be performed using [BCFtools](http://samtools.github.io/bcftools/bcftools.html).
+
+Split multialleleic sites:
+```
+bcftools norm -m-any -o OUTPUT.vcf  INPUT.vcf
+```
+
+Normalize INDELs:
+```
+bcftools norm -f $REF_GENOME -c s -o OUTPUT.vcf INPUT.vcf
+```
 
 ### Functional prediction
 
