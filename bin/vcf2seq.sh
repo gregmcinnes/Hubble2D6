@@ -1,23 +1,15 @@
 #!/bin/bash
-#SBATCH --job-name=vcf2seq
-#SBATCH --output=vcf2seq.%j.out
-#SBATCH --error=vcf2seq.%j.err
-#SBATCH --time=48:00:00
-#SBATCH -p rbaltman,owners,normal
-#SBATCH --nodes=1
-#SBATCH --mem 20G
-#SBATCH --mail-type=FAIL
 
 # Input: VCF
 input_vcf=$1
 prefix=$2
 
-# Install path
-HUBBLE_PATH=/oak/stanford/groups/rbaltman/gmcinnes/projects/cyp2d6/Hubble2D6
-BCFTOOLS_PATH=/share/software/user/open/bcftools/1.8/bin
-ANNOVAR_PATH=/oak/stanford/groups/rbaltman/gmcinnes/bin/annovar
-VEP_PATH=/home/groups/rbaltman/gmcinnes/bin/vep/ensembl-vep
-REF_GENOME=/oak/stanford/groups/rbaltman/gmcinnes/data/human_genome/hg19/hg19/hg19.fa
+# Set paths, if not done from the command line
+#HUBBLE_PATH=PATH_TO_INSTALL_DIR
+#BCFTOOLS_PATH=PATH_TO_BCFTOOLS
+#ANNOVAR_PATH=PATH_TO_ANNOVAR
+#VEP_PATH=PATH_TO_VEP
+#REF_GENOME=PATH_TO_REF_GENOME
 
 source ~/.bash_profile
 conda activate hubble
