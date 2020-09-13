@@ -9,27 +9,60 @@ Read more about Hubble.2D6 in the [manuscript](https://www.biorxiv.org/content/1
 \*Increased function is not predicted because currently the only known mechanism the leads to an increased function allele is through increased copy number, which is not evaluated by Hubble.2D6.  
 
 
+## Quick start
+If you only need to analyze haplotypes containing SNVs and common INDELs (INDELs found in existing star alleles), you can use the quick installation.  We have precomputed embeddings for all possible SNVs and common INDELs so the lengthy annotation step is not needed. If you require analysis of INDELs not in existing star alleles, proceed to "Full Installation".
 
-## Installation
+### Installation
 
 We recommend using a [conda](https://docs.conda.io/en/latest/) environment for the python libraries. Python version 3.6 required.
 
-### Quick Installation
-
-If you only need to analyze haplotypes containing SNVs and common INDELs (INDELs found in existing star alleles), you can use the quick installation.  We have precomputed embeddings for all possible SNVs and common INDELs so the lengthy annotation step is not needed. If you require analysis of INDELs not in existing star alleles, proceed to "Full Installation".
-
-#### Intall Python libraries
-
 ```pip install -r requirements.txt```
 
+### Data preprocessing
 
-### Full Installation
-Hubble.2D6 uses annotation embeddings for input variants to predict star allele function.  A number of steps are required to generate the annotation embeddings, which requires installation of several tools.  If you only need to evaluate star alleles with SNVs, you can skip this step.  Annotation embeddings for SNVs have been precomputed.
+Multiallelic sites need to be split and INDELs realigned. This ensures INDELs can be mapped consistently to annotation embeddings. These functions can be performed using [BCFtools](http://samtools.github.io/bcftools/bcftools.html).
 
-_Fair warning, installation of VEP can be frustrating and the Annovar libraries are very large._
+Split multialleleic sites:
+```
+bcftools norm -m-any -o OUTPUT.vcf  INPUT.vcf
+```
+
+Normalize INDELs:
+```
+bcftools norm -f $REF_GENOME -c s -o OUTPUT.vcf INPUT.vcf
+```
+
+
+### Predict
+
+Finally, predict haplotype function using `hubble.py`.  The output will be written to `hubble_output.txt` or a file specified with `--output`. 
+
+The input to Hubble.2D6 is a VCF and can have as many samples (haploytypes) as needed.  All sites that differ from the reference (*1) should be listed in the VCF and the appropriate allele indicated as homozygous (e.g. 1/1). 
+
+Example:
+```
+python bin/hubble.py -s data/sample.vcf
+```
+
+Run `python bin/hubble.py --help` for full list of commands.
+
+
+
+## Full Installation
+Hubble.2D6 uses annotation embeddings for input variants to predict star allele function.  If you reqruire analysis of INDELs not found in existing star alleles (currently up to *CYP2D6\*139*) you need to generated annotation embeddings to perform the analysis. A number of steps are required to generate the annotation embeddings which requires installation of several tools.  *Reminder: If you only need to evaluate star alleles with SNVs, you can skip this step.  Annotation embeddings for SNVs have been precomputed.*
+
+_Fair warning, installation of VEP can be frustrating and the Annovar databases are very large._
+
+_If you struggle with installation, open an issue and we may be able to generate annotation embeddings for you._
+
+### Installation
 
 #### Intall Python libraries
-* pip install -r requirements.txt
+We recommend using a [conda](https://docs.conda.io/en/latest/) environment for the python libraries. Python version 3.6 required.
+
+```
+pip install -r requirements.txt
+```
 
 #### Intall Annovar
 * Install [Annovar](https://annovar.openbioinformatics.org/en/latest/)
@@ -73,19 +106,10 @@ BCFtools=path_to_bcftools
 REF_GENOME=path_to_ref_genomie
 ```
 
-## Run
+### Create the annotation embeddings
 
-The input to Hubble.2D6 is a VCF and can have as many samples as needed.  To evaluate star alleles, all sites with an alternate allele
-should be marked as having a homozygous alternate allele (1/1).  
+Input a VCF into the data processing pipeline which will annotation the variants and create embeddings that can be used for prediction.
 
-
-### Data preprocessing
-
-#### Annotations
-
-**_If you are only processing SNVs and common INDELs you can skip this step._**
-
-First the VCF needs to be converted to a sequence of variant embeddings
 ```
 sh bin/vcf2seq.sh INPUT_VCF PREFIX
 ```
@@ -97,28 +121,10 @@ sh bin/vcf2seq.sh data/test.vcf test
 
 This will generate a file with a .seq extension that can be used to predict function
 
-#### VCF
-When using SNVs and common INDELs, you should split multiallelic sites and realign INDELs. This ensures INDELs can be mapped consistently to annotation embeddings. These functions can be performed using [BCFtools](http://samtools.github.io/bcftools/bcftools.html).
 
-Split multialleleic sites:
-```
-bcftools norm -m-any -o OUTPUT.vcf  INPUT.vcf
-```
+### Predict
 
-Normalize INDELs:
-```
-bcftools norm -f $REF_GENOME -c s -o OUTPUT.vcf INPUT.vcf
-```
-
-### Functional prediction
-
-SNVs and common INDELs only can be mapped from VCF.  Generate star allele predictions using the following command:
-
-```
-python bin/hubble.py -s data/sample.vcf
-```
-
-If you require INDELs that have not been precomputed, after preparing the seq file as described above use this function to predict the haplotype function.
+After preparing the seq file as described above use this function to predict the haplotype function.
 
 Example:
 ```
