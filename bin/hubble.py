@@ -32,9 +32,10 @@ from gseq import get_vcf_subject_ids, parse_vcf_line
 from predict import HubblePredict
 
 class Hubble(object):
-    def __init__(self, vcf=None, seq=None, force=False, debug=False):
+    def __init__(self, vcf=None, seq=None, output=None, force=False, debug=False):
         self.vcf = vcf
         self.seq = seq
+        self.output = output
         self.force = force
         self.debug = debug
 
@@ -53,7 +54,7 @@ class Hubble(object):
     def seq_run(self):
         if self.debug:
             print("Running from seq file")
-        hubble = HubblePredict(seq_file=self.seq, debug=self.debug)
+        hubble = HubblePredict(seq_file=self.seq, output=self.output, debug=self.debug)
         hubble.run()
 
         if self.debug:
@@ -70,7 +71,7 @@ class Hubble(object):
         data = self.format_seqs(seqs)
 
         # Predict
-        hubble = HubblePredict(debug=self.debug)
+        hubble = HubblePredict(output=self.output, debug=self.debug)
         hubble.run(data=data)
 
     def build_seqs(self):
@@ -220,6 +221,7 @@ def parse_command_line():
                              "yet supported, split multiallelic sites into different files.")
     parser.add_argument("-s", "--seq",
                         help="SEQ file input.  File containing embedding indices.  Used for annotation of uncommon INDELs.")
+    parser.add_argument("-o", "--output", help="Output file. Default=hubble_output.txt")
     parser.add_argument("-f", "--force", action='store_true', default=False,
                         help="Ignore warnings for unmapped variants")
     parser.add_argument("-d", "--debug", action='store_true', default=False,
@@ -236,6 +238,7 @@ if __name__ == "__main__":
     options = parse_command_line()
     Hubble(vcf=options.vcf,
            seq=options.seq,
+           output=options.output,
            force=options.force,
            debug=options.debug)
 

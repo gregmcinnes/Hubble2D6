@@ -6,17 +6,17 @@ Hubble.2D6 is a tool to predict *CYP2D6* haplotype function.  Hubble.2D6 predict
 
 Read more about Hubble.2D6 in the [manuscript](https://www.biorxiv.org/content/10.1101/684357v2.abstract).
 
-\*Increased function is not predicted because, currently, the only known mechanism the leads to an increased function allele is through increased copy number, which is not evaluated by Hubble.2D6.  
+\*Increased function is not predicted because currently the only known mechanism the leads to an increased function allele is through increased copy number, which is not evaluated by Hubble.2D6.  
 
 
 
 ## Installation
 
+We recommend using a [conda](https://docs.conda.io/en/latest/) environment for the python libraries. Python version 3.6 required.
+
 ### Quick Installation
 
---- This has not yet been implemented.  Coming very soon. Proceed to Full Installation. ---
-
-This method only works to evaluate star alleles that comprise only SNVs.  All annotation embeddings have been precomputed for SNVs, so installation of annovar and VEP is not necessary.  If you require analysis of INDELs, proceed to "Full Installation"
+If you only need to analyze haplotypes containing SNVs and common INDELs *--coming soon--* (INDELs found in existing star alleles), you can use the quick installation.  We have precomputed embeddings for all possible SNVs and common INDELs so the lengthy annotation step is not needed. If you require analysis of INDELs not in existing star alleles, proceed to "Full Installation".
 
 #### Intall Python libraries
 
@@ -24,7 +24,9 @@ This method only works to evaluate star alleles that comprise only SNVs.  All an
 
 
 ### Full Installation
-Hubble.2D6 uses annotation embeddings for input variants to predict star allele function.  A number of steps are required to generate the annotation embeddings, which requires installation of several tools.  If you only need to evaluate star alleles with SNVs, you can skip this step.  Annotation embeddings for SNVs have been precomputed.  When running hubble use the flag `--no-indels` to skip the annotation step.
+Hubble.2D6 uses annotation embeddings for input variants to predict star allele function.  A number of steps are required to generate the annotation embeddings, which requires installation of several tools.  If you only need to evaluate star alleles with SNVs, you can skip this step.  Annotation embeddings for SNVs have been precomputed.
+
+_Fair warning, installation of VEP can be frustrating and the Annovar libraries are very large._
 
 #### Intall Python libraries
 * pip install -r requirements.txt
@@ -78,6 +80,9 @@ should be marked as having a homozygous alternate allele (1/1).
 
 
 ### Data preprocessing
+
+**_If you are only processing SNVs and common INDELs you can skip this step._**
+
 First the VCF needs to be converted to a sequence of variant embeddings
 ```
 sh bin/vcf2seq.sh INPUT_VCF PREFIX
@@ -91,15 +96,18 @@ sh bin/vcf2seq.sh data/test.vcf test
 This will generate a file with a .seq extension that can be used to predict function
 
 ### Functional prediction
-Once you have the seq file predictions can be made for star allele function.  Samples and their 
-functional predictions will be written to file specified with `-o`.
+
+SNVs and common INDELs only can be mapped from VCF.  Generate star allele predictions using the following command:
+
 ```
-python bin/predict.py -f INPUT.seq -o OUT_FILE
+python bin/hubble.py -s data/sample.vcf
 ```
+
+If you require INDELs that have not been precomputed, after preparing the seq file as described above use this function to predict the haplotype function.
 
 Example:
 ```
-python bin/predict.py -f data/test.seq -o test_predictions.txt
+python bin/hubble.py -s data/test.seq
 ```
 
 
