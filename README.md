@@ -102,7 +102,7 @@ Set global variables.  These do not need to be set for the quick installation.
 HUBBLE_PATH=path_to_install_dir
 ANNOVAR_PATH=path_to_annovar_dir
 VEP_PATH=path_to_vep_dir
-BCFtools=path_to_bcftools
+BCFTOOLS_PATH=path_to_bcftools
 REF_GENOME=path_to_ref_genomie
 ```
 
